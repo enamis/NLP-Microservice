@@ -1,10 +1,13 @@
 package com.NLP.NLP.Microservice.service;
 
+import com.NLP.NLP.Microservice.dao.CsvRepository;
+import com.NLP.NLP.Microservice.model.TextDb;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.util.CoreMap;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +18,13 @@ import java.util.Properties;
 @Service
 public class StanfordLemmatizerService {
 
+    public static final String QUOTE = "\"";
     protected StanfordCoreNLP pipeline;
+
+    //TextDb textDb=new TextDb();
+
+    @Autowired
+    private CsvRepository csvRepository;
 
     public void stanfordLemmatizerService() {
 
@@ -40,13 +49,22 @@ public class StanfordLemmatizerService {
 
         // Iterate over all of the sentences found
         List<CoreMap> sentences = document.get(CoreAnnotations.SentencesAnnotation.class);
+
         for(CoreMap sentence: sentences) {
+
+
             // Iterate over all tokens in a sentence
             for (CoreLabel token: sentence.get(CoreAnnotations.TokensAnnotation.class)) {
                 // Retrieve and add the lemma for each word into the list of lemmas
                 lemmas.add(token.get(CoreAnnotations.LemmaAnnotation.class));
+                if(!(token.value().equals(QUOTE))&&!(token.lemma().equals(QUOTE))){
+                    TextDb t1= new TextDb(token.value(),token.get(CoreAnnotations.LemmaAnnotation.class));
+                    csvRepository.save(t1);
+                }
+
             }
         }
+
 
         return lemmas;
     }
