@@ -1,34 +1,43 @@
 package com.NLP.NLP.Microservice.restController;
 
 
-import com.NLP.NLP.Microservice.model.CsvTextMODEL;
 import com.NLP.NLP.Microservice.service.CsvService;
-import com.opencsv.bean.CsvToBean;
-import com.opencsv.bean.CsvToBeanBuilder;
+import com.NLP.NLP.Microservice.service.StanfordLemmatizerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.PostConstruct;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.List;
 
 @RestController
 public class UploadController {
+    private String content;
 
     @Autowired
     private CsvService csvService;
 
+    @Autowired
+    private StanfordLemmatizerService stanfordLemmatizer;
+
     @PostMapping("/upload-csv")
     public String uploadCsvFile(@RequestParam("file") MultipartFile file) throws IOException {
-         csvService.upload(file);
+         content=csvService.upload(file);
         return "File uploaded";
+    }
+
+    @PostMapping("/doLemmatization")
+    public List<String> limitizer(@RequestBody List<String> list){
+        return stanfordLemmatizer.lemmatize(csvService.convertListToString(list));
+    }
+    @PostMapping("/doLemmatizationOnText")
+    public List<String> limitizer(@RequestBody String text){
+        return stanfordLemmatizer.lemmatize(text);
+    }
+
+    @GetMapping("/getLematizedForm/{word}")
+    public List<String> getLematizedForm(@PathVariable String word){
+         return limitizer(word);
     }
 
 
