@@ -1,6 +1,8 @@
 package com.NLP.NLP.Microservice.restController;
 
 
+import com.NLP.NLP.Microservice.dao.CsvRepository;
+import com.NLP.NLP.Microservice.model.TextDb;
 import com.NLP.NLP.Microservice.service.CsvService;
 import com.NLP.NLP.Microservice.service.StanfordLemmatizerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,8 @@ public class UploadController {
 
     @Autowired
     private StanfordLemmatizerService stanfordLemmatizer;
+
+
 
     @PostMapping("/upload-csv")
     public String uploadCsvFile(@RequestParam("file") MultipartFile file) throws IOException {
@@ -40,6 +44,11 @@ public class UploadController {
          return limitizer(word);
     }
 
+    @GetMapping("/getWordsStartWith/{param}")
+    public List<String> getWordsStartWith(@PathVariable String param){
+        return csvService.searchBy(param);
+
+    }
 
 
 

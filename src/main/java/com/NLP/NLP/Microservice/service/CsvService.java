@@ -1,5 +1,6 @@
 package com.NLP.NLP.Microservice.service;
 import com.NLP.NLP.Microservice.dao.CsvRepository;
+import com.NLP.NLP.Microservice.model.TextDb;
 import edu.stanford.nlp.ie.machinereading.BasicEntityExtractor;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ public class CsvService {
 
     @Autowired
     private CsvRepository csvRepository;
+
+
     private BasicEntityExtractor pipeline;
 
     public String upload(MultipartFile file)  {
@@ -50,14 +53,18 @@ public class CsvService {
         {
             listString += s + "\t";
         }
-
         return listString;
-
     }
 
+    public List<String> searchBy(String param){
+      List<TextDb> listTextDb= csvRepository.findByNormalTextStartingWith(param);
+      List<String> list = new ArrayList<>();
+        for (TextDb textDb : listTextDb) {
+            list.add(textDb.getNormalText());
+        }
+        return list;
 
-
-
+    }
 
 
 
