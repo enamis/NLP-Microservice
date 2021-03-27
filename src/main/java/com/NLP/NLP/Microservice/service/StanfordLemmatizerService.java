@@ -7,6 +7,7 @@ import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.util.CoreMap;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
+@Slf4j
 @Service
 public class StanfordLemmatizerService {
 
@@ -59,7 +61,8 @@ public class StanfordLemmatizerService {
                 lemmas.add(token.get(CoreAnnotations.LemmaAnnotation.class));
                 if(!(token.value().equals(QUOTE))&&!(token.lemma().equals(QUOTE))){
                     TextDb t1= new TextDb(token.value(),token.get(CoreAnnotations.LemmaAnnotation.class));
-                    csvRepository.save(t1);
+                    log.info("processed: "+ csvRepository.save(t1));
+
                 }
 
             }

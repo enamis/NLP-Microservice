@@ -6,6 +6,7 @@ import com.NLP.NLP.Microservice.model.TextDb;
 import com.NLP.NLP.Microservice.service.CsvService;
 import com.NLP.NLP.Microservice.service.StanfordLemmatizerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,6 +40,7 @@ public class UploadController {
         return stanfordLemmatizer.lemmatize(text);
     }
 
+    @Cacheable("getLematizedForm")
     @GetMapping("/getLematizedForm/{word}")
     public List<String> getLematizedForm(@PathVariable String word){
          return limitizer(word);

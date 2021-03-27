@@ -5,9 +5,11 @@ import edu.stanford.nlp.ie.machinereading.BasicEntityExtractor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.*;
 
 import java.nio.charset.StandardCharsets;
@@ -27,6 +29,7 @@ public class CsvService {
 
 
     private BasicEntityExtractor pipeline;
+
 
     public String upload(MultipartFile file)  {
             try {
