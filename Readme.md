@@ -17,7 +17,7 @@ The Technical Stack composed by :
 ## Mandatory Features
 
 - [ ] Upload Xml/CSV Files to Microservices
-- [ ] Open & Read File (XML,CSV) with Java/Spring
+- [ ] Open & Read File CSV with Java/Spring
 - [ ] Parse Text Content with Java
 - [ ] Process the text content with Lematization process
 - [ ] Split text to words and store them to database
